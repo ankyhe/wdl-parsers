@@ -194,7 +194,7 @@ task_input
 	;
 
 task_output
-	: OUTPUT LBRACE (bound_decls)* RBRACE
+	: OUTPUT LBRACE (any_decls)* RBRACE
 	;
 
 

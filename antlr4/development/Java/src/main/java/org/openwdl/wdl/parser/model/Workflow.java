@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,21 +16,19 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @Data
 @NoArgsConstructor
-public class Call implements InnerWorkflowElement {
+public class Workflow {
 
     @NotBlank
     private String name;
 
     @Builder.Default
-    private List<@NotNull CallInput> inputs = new ArrayList<>();
+    private List<WorkflowElement> workflowElements = new ArrayList<>();
 
     @Override
     public String toString() {
-        final String s = (this.inputs == null ? List.of() : this.inputs)
-                .stream()
+        final String s = (this.workflowElements == null ? List.of() : this.workflowElements).stream()
                 .map(Objects::toString)
                 .collect(Collectors.joining(", "));
-
-        return "Call: %s Inputs: [%s]".formatted(this.name, s);
+        return "Workflow: %s %s".formatted(this.name, s);
     }
 }

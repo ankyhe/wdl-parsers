@@ -1,4 +1,4 @@
-package org.openwdl.wdl.parser.model;
+package org.openwdl.wdl.parser.model.expression;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,17 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @Data
 @NoArgsConstructor
-public class Task {
+public class IdentifierExpression implements PrimitiveLiteralExpression {
 
     @NotBlank
-    private String name;
-
-    private Input input;
-
-    private Output output;
+    private String identifierName;
 
     @Override
     public String toString() {
-        return "Task: %s %s %s".formatted(this.name, this.input, this.output);
+        return this.identifierName;
     }
 }

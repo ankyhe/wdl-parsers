@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,16 +16,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @Data
 @NoArgsConstructor
-public abstract class AbstractTaskInputOutput {
+public abstract class AbstractInputOutput implements WorkflowElement {
 
-    private static final String TASK_SUFFIX = "Task";
-    
     @NotEmpty
     protected List<@NotNull Declaration> declarations;
-
-    protected String toStringSuffix() {
-        return StringUtils.removeStart(this.getClass().getSimpleName(), TASK_SUFFIX);
-    }
 
     @Override
     public String toString() {
@@ -35,7 +27,7 @@ public abstract class AbstractTaskInputOutput {
                 .stream()
                 .map(Objects::toString)
                 .collect(Collectors.joining(", "));
-        return "%s (%s)".formatted(toStringSuffix(), s);
+        return "%s (%s)".formatted(getClass().getSimpleName(), s);
     }
 
 }

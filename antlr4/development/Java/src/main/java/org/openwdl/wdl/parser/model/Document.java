@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,6 +25,10 @@ public class Document {
 
     @Builder.Default
     private List<@NotNull Task> tasks = new ArrayList<>();
+
+    @Builder.Default
+    @Size(max = 1) /* support more in the future */
+    private List<@NotNull Workflow> workflows = new ArrayList<>();
 
     public String getVersion() {
         if (StringUtils.isNotBlank(this.version)) {

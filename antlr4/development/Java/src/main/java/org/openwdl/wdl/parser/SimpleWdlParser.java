@@ -12,8 +12,8 @@ import org.openwdl.wdl.parser.model.Document;
 public class SimpleWdlParser {
 
     public Document parse(@NotBlank final String s) {
-        final WdlLexer lexer = new WdlLexer(CharStreams.fromString(s));
-        final WdlParser parser = new WdlParser(new CommonTokenStream(lexer));
+        final org.openwdl.wdl.parser.WdlLexer lexer = new org.openwdl.wdl.parser.WdlLexer(CharStreams.fromString(s));
+        final org.openwdl.wdl.parser.WdlParser parser = new org.openwdl.wdl.parser.WdlParser(new CommonTokenStream(lexer));
         final ParseTree tree = parser.document();
         final MyWdlParserListener listener = new MyWdlParserListener();
         ParseTreeWalker.DEFAULT.walk(listener, tree);
@@ -21,6 +21,7 @@ public class SimpleWdlParser {
         return Document.builder()
                 .version(listener.getVersion())
                 .tasks(listener.getTasks())
+                .workflows(listener.getWorkflows())
                 .build();
     }
 }

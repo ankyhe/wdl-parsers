@@ -5,6 +5,6 @@ import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class TaskInput extends AbstractTaskInputOutput {
+public class Output extends AbstractInputOutput {
 
 }

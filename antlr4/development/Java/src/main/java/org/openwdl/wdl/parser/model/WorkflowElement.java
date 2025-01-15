@@ -1,5 +1,5 @@
 package org.openwdl.wdl.parser.model;
 
-public interface Expression {
+public interface WorkflowElement {
 
 }

@@ -1,8 +1,5 @@
 package org.openwdl.wdl.parser.model;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import org.openwdl.wdl.parser.model.expression.Expression;
 
 import lombok.AllArgsConstructor;
@@ -14,19 +11,14 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @Data
 @NoArgsConstructor
-public class BoundDeclaration implements Declaration, InnerWorkflowElement {
+public class CallInput {
 
-    @NotBlank
-    private Type type;
+    private String name;
 
-    @NotBlank
-    private String argumentName;
-
-    @NotNull
     private Expression expression;
 
     @Override
     public String toString() {
-        return "%s %s=%s".formatted(this.type, this.argumentName, this.expression);
+        return "%s = %s".formatted(this.name, this.expression);
     }
 }

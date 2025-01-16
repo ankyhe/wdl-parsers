@@ -3,9 +3,9 @@ package org.openwdl.wdl.parser.listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.commons.lang3.StringUtils;
 import org.openwdl.wdl.parser.WdlParser;
-import org.openwdl.wdl.parser.WdlParserBaseListener;
 import org.openwdl.wdl.parser.exception.WdlParserException;
 import org.openwdl.wdl.parser.model.AnyType;
 import org.openwdl.wdl.parser.model.ArrayType;
@@ -28,11 +28,12 @@ import org.openwdl.wdl.parser.model.expression.GetNameExpression;
 import org.openwdl.wdl.parser.model.expression.IdentifierExpression;
 import org.openwdl.wdl.parser.model.expression.IntExpression;
 import org.openwdl.wdl.parser.model.expression.LongExpression;
+import org.openwdl.wdl.parser.model.expression.RangeExpression;
 import org.openwdl.wdl.parser.model.expression.StringExpression;
 
 import lombok.Getter;
 
-public class MyWdlParserListener extends WdlParserBaseListener {
+public class MyWdlParserListener extends WdlParserDefaultListener {
 
     @Getter
     private String version;
@@ -53,7 +54,7 @@ public class MyWdlParserListener extends WdlParserBaseListener {
 
     private Expression expression;
 
-    private List<Expression> rangeExpressions;
+    private RangeExpression rangeExpression;
 
     private List<Declaration> declarations;
 
@@ -307,5 +308,47 @@ public class MyWdlParserListener extends WdlParserBaseListener {
                 .build();
 
         super.exitGet_name(ctx);
+    }
+
+    @Override
+    public void enterRange(final WdlParser.RangeContext ctx) {
+        this.rangeExpression = new RangeExpression();
+
+        super.enterRange(ctx);
+    }
+
+    @Override
+    public void exitRange(final WdlParser.RangeContext ctx) {
+        this.expression = this.rangeExpression;
+        this.rangeExpression = null;
+
+        super.exitRange(ctx);
+    }
+
+    @Override
+    public void exitExpr(final WdlParser.ExprContext ctx) {
+        if (ctx.parent instanceof final WdlParser.RangeContext parent) {
+            if (parent.expr(0).getRuleContext() == ctx) {
+                this.rangeExpression.setBegin(this.expression);
+            } else if (parent.expr(1).getRuleContext() == ctx) {
+                this.rangeExpression.setEnd(this.expression);
+            } else {
+                throw new WdlParserException("Failed to parse expression as expr_core: %s".formatted(ctx.getText()));
+            }
+        }
+
+        super.exitExpr(ctx);
+    }
+
+    @Override
+    protected void exitExpr_core(final ParserRuleContext ctx) {
+        if (ctx.parent instanceof final WdlParser.RangeContext parent) {
+            if (parent.expr_core().getRuleContext() == ctx) {
+                if (!(this.expression instanceof ExpressionCore)) {
+                    throw new WdlParserException("Failed to parse expression as expr_core: %s".formatted(ctx.getText()));
+                }
+                this.rangeExpression.setExpressionCore((ExpressionCore)this.expression);
+            }
+        }
     }
 }

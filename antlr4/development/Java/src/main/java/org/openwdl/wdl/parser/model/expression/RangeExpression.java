@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RangeExpression implements ExpressionCore {
 
+    @NotNull
+    private ExpressionCore expressionCore;
+
     /*
      * Inclusive
      */
@@ -33,6 +36,6 @@ public class RangeExpression implements ExpressionCore {
 
     @Override
     public String toString() {
-        return "[%s:%s]".formatted(this.begin, this.end);
+        return "%s[%s:%s]".formatted(this.expressionCore, this.begin, this.end);
     }
 }

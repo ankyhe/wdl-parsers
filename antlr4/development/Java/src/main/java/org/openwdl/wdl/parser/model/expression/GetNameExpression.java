@@ -24,4 +24,9 @@ public class GetNameExpression implements ExpressionCore {
     public boolean isValid() {
         return (this.scope instanceof IdentifierExpression) || (this.scope instanceof GetNameExpression);
     }
+
+    @Override
+    public String toString() {
+        return "%s.%s".formatted(this.scope, this.identifier);
+    }
 }

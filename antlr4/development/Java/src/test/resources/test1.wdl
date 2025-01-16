@@ -36,7 +36,7 @@ workflow AddRecentMachinesToPool {
   }
 
   # 从获取的机器列表中提取前10台机器
-  Array[String] top_10_machines = get_recent_machines.machine_ids
+  Array[String] top_10_machines = get_recent_machines.machine_ids[0:10]
 
   # 调用 add_machines_to_pool 任务，将前10台机器加入指定桌面池
   call add_machines_to_pool {

@@ -125,11 +125,12 @@ expr_core
 	| LBRACE (expr COLON expr (COMMA expr COLON expr)*)* RBRACE #map_literal
 	| Identifier LBRACE (Identifier COLON expr (COMMA Identifier COLON expr)*)* RBRACE #struct_literal
 	| IF expr THEN expr ELSE expr #ifthenelse
-    | LPAREN expr RPAREN #expression_group
+  | LPAREN expr RPAREN #expression_group
 	| expr_core LBRACK expr RBRACK #at
-    | expr_core DOT Identifier #get_name
-    | NOT expr #negate
-    | (PLUS | MINUS) expr #unirarysigned
+	| expr_core LBRACK expr COLON expr RBRACK #range
+  | expr_core DOT Identifier #get_name
+  | NOT expr #negate
+  | (PLUS | MINUS) expr #unirarysigned
 	| primitive_literal #primitives
 	| Identifier #left_name
 	;
